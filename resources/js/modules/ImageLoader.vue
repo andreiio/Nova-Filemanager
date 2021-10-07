@@ -18,7 +18,7 @@
                 </div>
 
                 <div  v-if="file.mime == 'image'" ref="image" class="image-block block w-full h-5/6">
-
+                    <img :src="file.thumb" class="block w-full h-full object-cover" loading="lazy" />
                 </div>
 
                 <div class="actions-grid absolute pin-t pin-r pr-2 pt-2 pb-1 pl-2 "
@@ -72,7 +72,7 @@
                         </div>
 
                         <div  v-if="file.mime == 'image'" ref="image" class="image-block block w-full h-full">
-
+                            <img :src="file.thumb" class="block w-full h-full object-cover" loading="lazy" />
                         </div>
                     </div>
 
@@ -114,7 +114,6 @@
 
 <script>
 import findIndex from 'lodash/findIndex';
-import { Minimum } from 'laravel-nova';
 
 export default {
     components: {
@@ -187,38 +186,7 @@ export default {
     },
 
     mounted() {
-        if (this.file.mime == 'image') {
-            Minimum(
-                window.axios.get(this.file.thumb, {
-                    responseType: 'blob',
-                })
-            )
-                .then(({ headers, data }) => {
-                    const blob = new Blob([data], { type: headers['content-type'] });
-                    let imageDiv = document.createElement('div');
-                    let imageBlog = null;
-
-                    imageBlog = window.URL.createObjectURL(blob);
-                    imageDiv.style.backgroundImage = "url('" + imageBlog + "')";
-                    imageDiv.className = this.getClassContainer();
-                    imageDiv.draggable = false;
-                    this.$refs.image.appendChild(imageDiv);
-                    this.loading = false;
-                })
-                .catch(error => {
-                    if (error && this.$refs.image) {
-                        //defaulImage
-                        let imageDiv = document.createElement('div');
-                        imageDiv.style.backgroundImage = "url('" + this.file.thumb + "')";
-                        imageDiv.className = this.getClassContainer();
-                        imageDiv.draggable = false;
-                        this.$refs.image.appendChild(imageDiv);
-                        this.loading = false;
-                    }
-                });
-        } else {
-            this.loading = false;
-        }
+        this.$nextTick(() => this.loading = false);
     },
     methods: {
         clickStrategy() {
@@ -234,14 +202,6 @@ export default {
 
         showInfo() {
             this.$emit('showInfo', this.file);
-        },
-
-        getClassContainer() {
-            if (this.view == 'list') {
-                return 'block w-full h-full bg-center bg-cover h-2/3';
-            }
-
-            return 'block w-full h-full bg-center bg-cover h-2/3';
         },
 
         deleteFile(e) {
