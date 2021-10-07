@@ -18,9 +18,7 @@
                 </div>
 
                 <div  v-if="file.mime == 'image'" ref="image" class="image-block block w-full h-5/6">
-                    <lazy-component>
-                        <img :src="file.thumb" class="block w-full h-full object-cover" />
-                    </lazy-component>
+                    <img v-lazy="file.thumb" class="block w-full h-full object-cover" />
                 </div>
 
                 <div class="actions-grid absolute pin-t pin-r pr-2 pt-2 pb-1 pl-2 "
@@ -74,9 +72,7 @@
                         </div>
 
                         <div  v-if="file.mime == 'image'" ref="image" class="image-block block w-full h-full">
-                            <lazy-component>
-                                <img :src="file.thumb" class="block w-full h-full object-cover" loading="lazy" />
-                            </lazy-component>
+                            <img v-lazy="file.thumb" class="block w-full h-full object-cover" />
                         </div>
                     </div>
 

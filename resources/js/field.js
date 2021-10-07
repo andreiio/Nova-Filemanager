@@ -6,7 +6,6 @@ Nova.booting(Vue => {
     Vue.component('form-filemanager-field', require('./field/FormField'));
 
     Vue.use(VueLazyload, {
-        lazyComponent: true,
         observer: true,
         observerOptions: {
             rootMargin: '0px',
